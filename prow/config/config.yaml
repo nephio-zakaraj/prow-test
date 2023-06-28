@@ -1,0 +1,85 @@
+prowjob_namespace: prow
+pod_namespace: test-pods
+
+in_repo_config:
+  enabled:
+    nephio-zakaraj/prow-test: true
+  allowed_clusters:
+    "*": ["default"]
+
+deck:
+  spyglass:
+    lenses:
+    - lens:
+        name: metadata
+      required_files:
+      - ^(?:started|finished)\.json$
+      optional_files:
+      - ^(?:podinfo|prowjob)\.json$
+    - lens:
+        config:
+        name: buildlog
+      required_files:
+      - build-log.txt
+    - lens:
+        name: junit
+      required_files:
+      - .*/junit.*\.xml
+    - lens:
+        name: podinfo
+      required_files:
+      - podinfo.json
+
+plank:
+  job_url_prefix_config:
+    "*": https://prow.arajguru.dev/view/
+  report_templates:
+    '*': >-
+        [Full PR test history](https:/prow.arajguru.dev/pr-history?org={{.Spec.Refs.Org}}&repo={{.Spec.Refs.Repo}}&pr={{with index .Spec.Refs.Pulls 0}}{{.Number}}{{end}}).
+        [Your PR dashboard](https://prow.arajguru.dev/pr?query=is:pr+state:open+author:{{with
+        index .Spec.Refs.Pulls 0}}{{.Author}}{{end}}).
+  default_decoration_config_entries:
+    - config:
+        gcs_configuration:
+          bucket: gs://nephio-akash-bucket
+          path_strategy: explicit
+        gcs_credentials_secret: gcs-credentials
+        github_api_endpoints:
+          - http://ghproxy
+          - https://api.github.com
+        github_app_id: "350959"
+        github_app_private_key_secret:
+          name: github-token
+          key: cert
+        utility_images:
+          clonerefs: gcr.io/k8s-prow/clonerefs:v20230613-9df263832f
+          entrypoint: gcr.io/k8s-prow/entrypoint:v20230613-9df263832f
+          initupload: gcr.io/k8s-prow/initupload:v20230613-9df263832f
+          sidecar: gcr.io/k8s-prow/sidecar:v20230613-9df263832f
+
+tide:
+  queries:
+  - labels:
+    - lgtm
+    - approved
+    missingLabels:
+    - needs-rebase
+    - do-not-merge/hold
+    - do-not-merge/work-in-progress
+    - do-not-merge/invalid-owners-file
+    orgs:
+    - nephio-zakaraj
+
+presubmits:
+  nephio-zakaraj/prow-test:
+  - name: pull-job
+    always_run: true
+    decorate: true
+    spec:
+      containers:
+      - image: shekhawatsanjay/prow-golang-builder:latest
+        imagePullPolicy: IfNotPresent
+        command:
+        - "make"
+        args:
+        - "test"

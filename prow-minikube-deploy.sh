@@ -1,8 +1,4 @@
-#!/bin/bash
-
-set -x
-
-kubectl create clusterrolebinding cluster-admin-binding --clusterrole cluster-admin --user $(gcloud config get-value account)
+kubectl create clusterrolebinding cluster-admin-binding --clusterrole cluster-admin --user minikube
 
 kubectl create ns prow
 kubectl create ns test-pods
@@ -25,14 +21,3 @@ kubectl -n prow create secret generic gcs-credentials --from-file=service-accoun
 kubectl apply --server-side=true -f config/prow/cluster/prowjob-crd/prowjob_customresourcedefinition.yaml
 
 kubectl apply -f prow/cluster/starter/starter-gcs.yaml
-
-
-
-
-#### After insatiing  the github app on org
-go run ./prow/cmd/checkconfig --plugin-config=prow/config/plugins.yaml --config-path=prow/config/config.yaml
-
-# kubectl create configmap -n prow config \
-#   --from-file=config.yaml=prow/config/config.yaml --dry-run=server -o yaml | kubectl replace configmap -n prow config -f -
-
-kubectl create configmap -n prow config   --from-file=config.yaml=prow/config/config.yaml --dry-run=server -o yaml | kubectl apply -n prow -f -

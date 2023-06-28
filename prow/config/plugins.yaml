@@ -1,0 +1,21 @@
+plugins:
+  nephio-zakaraj:
+    plugins:
+    - approve
+    - assign
+    - blunderbuss
+    - help
+    - heart
+    - hold
+    - invalidcommitmsg
+    - label
+    - lgtm
+    - trigger
+    - verify-owners
+    - wip
+    - retitle
+    - override
+    - lifecycle
+  nephio-zakaraj/prow-test:
+    plugins:
+    - config-updater

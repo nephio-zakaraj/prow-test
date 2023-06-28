@@ -1,6 +1,0 @@
-plugins:
-  arajguruEST/prow-test:
-  - size
-  - cat
-  - dog
-  - trigger
