@@ -498,14 +498,14 @@ spec:
         secret:
           secretName: gcs-credentials
 ---
-apiVersion: networking.gke.io/v1
-kind: ManagedCertificate
-metadata:
-  name: nephio-managed-cert
-  namespace: prow
-spec:
-  domains:
-    - prow.arajguru.dev
+# apiVersion: networking.gke.io/v1
+# kind: ManagedCertificate
+# metadata:
+#   name: nephio-managed-cert
+#   namespace: prow
+# spec:
+#   domains:
+#     - prow.arajguru.dev
 ---
 apiVersion: v1
 kind: Service
@@ -1118,6 +1118,7 @@ rules:
     resources:
       - pods
     verbs:
+      - get
       - delete
       - list
       - watch
