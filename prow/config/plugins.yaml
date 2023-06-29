@@ -19,3 +19,10 @@ plugins:
   nephio-zakaraj/prow-test:
     plugins:
     - config-updater
+
+external_plugins:
+  nephio-zakaraj:
+  - name: needs-rebase
+    events:
+      - issue_comment
+      - pull_request
