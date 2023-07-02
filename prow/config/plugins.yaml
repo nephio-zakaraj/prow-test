@@ -19,3 +19,29 @@ plugins:
   nephio-zakaraj/prow-test:
     plugins:
     - config-updater
+
+external_plugins:
+  nephio-zakaraj:
+  - name: needs-rebase
+    events:
+      - issue_comment
+      - pull_request
+
+config_updater:
+  maps:
+    prow/config/config.yaml:
+      name: config
+      namespace: prow
+    prow/config/plugins.yaml:
+      name: plugins
+      namespace: prow
+
+
+approve:
+  - repos:
+    - nephio-zakaraj/build-test
+    require_self_approval: true
+    lgtm_acts_as_approve: false
+    
+override:
+  allow_top_level_owners: true
