@@ -4,6 +4,7 @@ pod_namespace: test-pods
 in_repo_config:
   enabled:
     nephio-zakaraj/prow-test: true
+    nephio-zakaraj/build-test: true
   allowed_clusters:
     "*": ["default"]
 
@@ -67,31 +68,27 @@ tide:
     - do-not-merge/invalid-owners-file
     orgs:
     - nephio-zakaraj
+  merge_method:
+    nephio-project/build-test: squash
+    nephio-project/prow-test: squash
 
 presubmits:
   nephio-zakaraj/prow-test:
-  - name: pull-job
-    always_run: true
+  - name: presubmit-prow-test-inrepoconfig-validation
+    annotations:
+    labels:
+    run_if_changed: '.prow.yaml|.prow/'
+    skip_report: false
     decorate: true
+    cluster: default
     spec:
       containers:
-      - image: shekhawatsanjay/prow-golang-builder:latest
-        imagePullPolicy: IfNotPresent
-        command:
-        - "make"
-        args:
-        - "test"
-
-presubmits:
-  nephio-zakaraj/prow-test:
-  - name: pull-job
-    always_run: true
-    decorate: true
-    spec:
-      containers:
-      - image: alpine
-        imagePullPolicy: IfNotPresent
-        command: ["/bin/date"]
+        - image: "gcr.io/k8s-prow/checkconfig:v20221208-8898931a7f"
+          command:
+            - "checkconfig"
+          args:
+            - "--plugin-config=../prow-test/prow/config/plugins.yaml"
+            - "--config-path=../prow-test/prow/config/config.yaml"
 
 postsubmits:
   nephio-zakaraj/prow-test:
