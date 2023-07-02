@@ -36,7 +36,6 @@ config_updater:
       name: plugins
       namespace: prow
 
-
 approve:
   - repos:
     - nephio-zakaraj/build-test
@@ -45,3 +44,4 @@ approve:
     
 override:
   allow_top_level_owners: true
+

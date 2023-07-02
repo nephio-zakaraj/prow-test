@@ -1,0 +1,26 @@
+presubmits:
+- name: pre-submit-test-infra-validate-local
+  annotations:
+  labels:
+  run_if_changed: '^prow/config/((plugins|config).yaml|jobs/)'
+  skip_report: false
+  decorate: true
+  cluster: default
+  spec:
+    containers:
+    - image: "gcr.io/k8s-prow/checkconfig:v20221208-8898931a7f"
+      command:
+      - "checkconfig"
+      args:
+      - "--plugin-config=prow/config/plugins.yaml"
+      - "--config-path=prow/config/config.yaml"
+
+periodics:
+- interval: 1h
+  agent: kubernetes
+  name: echo-test
+  spec:
+    containers:
+    - image: alpine
+      imagePullPolicy: IfNotPresent
+      command: ["/bin/date"]

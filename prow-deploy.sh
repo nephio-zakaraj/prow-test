@@ -11,6 +11,8 @@ kubectl create secret -n prow generic hmac-token --from-file=hmac=tokens/secret
 
 kubectl create secret -n prow generic github-token --from-file=cert=tokens/prow-zakaraj-bot.2023-06-22.private-key.pem --from-literal=appid=350959
 
+kubectl create secret -n test-pods generic github-token --from-file=cert=tokens/prow-zakaraj-bot.2023-06-22.private-key.pem --from-literal=appid=350959
+
 gcloud iam service-accounts create prow-gcs-publisher
 identifier="$(gcloud iam service-accounts list --filter 'name:prow-gcs-publisher' --format 'value(email)')"
 gsutil mb -l eu gs://nephio-akash-bucket # step 2
