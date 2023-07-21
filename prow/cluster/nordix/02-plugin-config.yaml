@@ -1,0 +1,49 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  namespace: prow
+  name: plugins
+data:
+  plugins.yaml: |
+    plugins:
+      nephio-zakaraj:
+        plugins:
+        - approve
+        - assign
+        - blunderbuss
+        - cat
+        - dog
+        - help
+        - heart
+        - hold
+        - label
+        - lgtm
+        - trigger
+        - verify-owners
+        - wip
+        - yuks
+      nephio-zakaraj/prow-test:
+        plugins:
+        - approve
+        - assign
+        - blunderbuss
+        - config-updater
+        - help
+        - hold
+        - label
+        - lgtm
+        - trigger
+        - verify-owners
+        - wip
+        - yuks
+    config_updater:
+      maps:
+        prow/jobs/**/*.yaml:
+          name: job-config
+          namespace: prow
+        prow/config/config.yaml:
+          name: config
+          namespace: prow
+        prow/config/plugins.yaml:
+          name: plugins
+          namespace: prow

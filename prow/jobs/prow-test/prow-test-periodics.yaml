@@ -1,0 +1,9 @@
+periodics:
+- interval: 5m
+  agent: kubernetes
+  name: echo-test
+  spec:
+    containers:
+    - image: alpine
+      imagePullPolicy: IfNotPresent
+      command: ["/bin/date"]

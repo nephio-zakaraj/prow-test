@@ -14,13 +14,3 @@ presubmits:
       args:
       - "--plugin-config=prow/config/plugins.yaml"
       - "--config-path=prow/config/config.yaml"
-
-periodics:
-- interval: 1h
-  agent: kubernetes
-  name: echo-test
-  spec:
-    containers:
-    - image: alpine
-      imagePullPolicy: IfNotPresent
-      command: ["/bin/date"]

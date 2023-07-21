@@ -1,12 +1,6 @@
 prowjob_namespace: prow
 pod_namespace: test-pods
 
-in_repo_config:
-  enabled:
-    nephio-zakaraj/prow-test: true
-    nephio-zakaraj/build-test: true
-  allowed_clusters:
-    "*": ["default"]
 
 deck:
   spyglass:
@@ -36,11 +30,12 @@ plank:
     "*": https://prow.arajguru.dev/view/
   report_templates:
     '*': >-
-      [Full PR test history](https:/prow.arajguru.dev/pr-history?org={{.Spec.Refs.Org}}&repo={{.Spec.Refs.Repo}}&pr={{with index .Spec.Refs.Pulls 0}}{{.Number}}{{end}}). [Your PR dashboard](https://prow.arajguru.dev/pr?query=is:pr+state:open+author:{{with index .Spec.Refs.Pulls 0}}{{.Author}}{{end}}).
+      [Full PR test history](https://prow.arajguru.dev/pr-history?org={{.Spec.Refs.Org}}&repo={{.Spec.Refs.Repo}}&pr={{with index .Spec.Refs.Pulls 0}}{{.Number}}{{end}}). [Your PR dashboard](https://prow.arajguru.dev/pr?query=is:pr+state:open+author:{{with index .Spec.Refs.Pulls 0}}{{.Author}}{{end}}).
+      [Your PR dashboard](https://prow.arajguru.dev/pr?query=is:pr+state:open+author:{{with index .Spec.Refs.Pulls 0}}{{.Author}}{{end}}).
   default_decoration_config_entries:
   - config:
       gcs_configuration:
-        bucket: gs://nephio-akash-bucket
+        bucket: gs://nephio-prow-bucket
         path_strategy: explicit
       gcs_credentials_secret: gcs-credentials
       github_api_endpoints:
@@ -69,35 +64,12 @@ tide:
     orgs:
     - nephio-zakaraj
   merge_method:
-    nephio-project/build-test: squash
-    nephio-project/prow-test: squash
+    nephio-zakaraj/build-test: squash
+    nephio-zakaraj/prow-test: squash
+    nephio-zakaraj/nephio-test-prow-project: squash
 
-presubmits:
-  nephio-zakaraj/prow-test:
-  - name: presubmit-prow-test-inrepoconfig-validation
-    annotations:
-    labels:
-    run_if_changed: '.prow.yaml|.prow/'
-    skip_report: false
-    decorate: true
-    cluster: default
-    spec:
-      containers:
-        - image: "gcr.io/k8s-prow/checkconfig:v20221208-8898931a7f"
-          command:
-            - "checkconfig"
-          args:
-            - "--plugin-config=../prow-test/prow/config/plugins.yaml"
-            - "--config-path=../prow-test/prow/config/config.yaml"
-
-postsubmits:
-  nephio-zakaraj/prow-test:
-  - name: pull-job
-    always_run: true
-    decorate: true
-    spec:
-      containers:
-      - image: alpine
-        imagePullPolicy: IfNotPresent
-        command: ["/bin/date"]
-
+# Sinker configurations (for cleanup)
+sinker:
+  resync_period: 1m
+  max_prowjob_age: 4h
+  max_pod_age: 4h

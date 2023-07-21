@@ -24,7 +24,7 @@ kubectl -n test-pods create secret generic gcs-credentials --from-file=service-a
 
 kubectl -n prow create secret generic gcs-credentials --from-file=service-account.json # this secret is also needed by deployments in the prow namespace
 
-kubectl apply --server-side=true -f config/prow/cluster/prowjob-crd/prowjob_customresourcedefinition.yaml
+kubectl apply --server-side=true -f prow/cluster/prowjob-crd/prowjob_customresourcedefinition.yaml
 
 kubectl apply -f prow/cluster/starter/starter-gcs.yaml
 

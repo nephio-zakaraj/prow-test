@@ -1,0 +1,26 @@
+presubmits:
+  - name: nmath-unit-test
+    decorate: true
+    skip_branches:
+    - ^main$
+    run_if_changed: "^.*.go$"
+    spec:
+      containers:
+      - image: nephio/gotests:1671656214984921088
+        command:
+        - make
+        args:
+        - unit
+
+  - name: nmath-lint
+    decorate: true
+    skip_branches:
+    - ^main$
+    run_if_changed: "^.*.go$"
+    spec:
+      containers:
+      - image: nephio/gotests:1671656214984921088
+        command:
+        - make
+        args:
+        - lint

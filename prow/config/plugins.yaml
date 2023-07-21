@@ -29,6 +29,9 @@ external_plugins:
 
 config_updater:
   maps:
+    prow/jobs/**/*.yaml:
+      name: job-config
+      namespace: prow
     prow/config/config.yaml:
       name: config
       namespace: prow
