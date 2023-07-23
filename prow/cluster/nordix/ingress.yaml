@@ -27,7 +27,7 @@ spec:
   - host: prow.arajguru.dev
     http:
       paths:
-      - path: /*
+      - path: /
         pathType: ImplementationSpecific
         backend:
           service:

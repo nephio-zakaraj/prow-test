@@ -1,6 +1,7 @@
 presubmits:
   - name: nmath-unit-test
     decorate: true
+    cluster: default
     skip_branches:
     - ^main$
     run_if_changed: "^.*.go$"
@@ -14,6 +15,7 @@ presubmits:
 
   - name: nmath-lint
     decorate: true
+    cluster: default
     skip_branches:
     - ^main$
     run_if_changed: "^.*.go$"

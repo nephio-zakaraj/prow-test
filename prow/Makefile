@@ -6,7 +6,7 @@ update-plugins:
 
 deploy-prow:
 	# kubectl apply --server-side=true -f ./cluster/prowjob_crd/prowjob_customresourcedefinition.yaml
-	kubectl apply -f ./cluster/starter/starter-nordix-gcs.yaml
+	kubectl apply -f ./cluster/nordix
 
 undeploy-prow:
 	kubectl delete -f ./cluster/starter/starter-nordix-gcs.yaml
